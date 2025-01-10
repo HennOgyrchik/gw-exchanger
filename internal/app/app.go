@@ -20,6 +20,7 @@ func (a *App) GetExchangeRates(ctx context.Context, _ *pb.Empty) (*pb.ExchangeRa
 
 	result, err := a.storage.GetExchangeRates(ctx)
 	if err != nil {
+		a.log.Err(op, err)
 		err = fmt.Errorf("%s: %w", op, err)
 	}
 
@@ -34,6 +35,7 @@ func (a *App) GetExchangeRateForCurrency(ctx context.Context, req *pb.CurrencyRe
 		ToCurrency:   req.ToCurrency,
 	})
 	if err != nil {
+		a.log.Err(op, err)
 		err = fmt.Errorf("%s: %w", op, err)
 	}
 

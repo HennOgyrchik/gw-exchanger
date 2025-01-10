@@ -20,3 +20,6 @@ type Server struct {
 	addr   string
 	server *grpc.Server
 }
+
+type ExchangeRatesResponse struct {
+}

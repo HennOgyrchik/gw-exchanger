@@ -14,12 +14,12 @@ type rateOfCurrency struct {
 func (p *PSQL) GetExchangeRates(ctx context.Context) (storages.ExchangeRatesResponse, error) {
 	const op = "PSQL GetExchangeRates"
 
-	var result storages.ExchangeRatesResponse
+	result := storages.ExchangeRatesResponse{Rates: make(map[string]float32)}
 
 	ctxWithTimeout, cancel := context.WithTimeout(ctx, p.timeout)
 	defer cancel()
 
-	rows, err := p.pool.Query(ctxWithTimeout, "select * from exchange")
+	rows, err := p.pool.Query(ctxWithTimeout, "select currency, rate from rates")
 	if err != nil {
 		return result, fmt.Errorf("%s: %w", op, err)
 	}
@@ -53,7 +53,7 @@ func (p *PSQL) GetExchangeRateForCurrency(ctx context.Context, request storages.
 		return result, fmt.Errorf("%s: %w", op, err)
 	}
 
-	var rates map[string]float32
+	rates := make(map[string]float32)
 
 	for rows.Next() {
 		var roc rateOfCurrency

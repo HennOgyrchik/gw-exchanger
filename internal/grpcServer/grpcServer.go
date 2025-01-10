@@ -40,9 +40,9 @@ func (s *Server) Stop() {
 	s.server.Stop()
 }
 
-func (h *handler) GetExchangeRates(ctx context.Context, e *pb.Empty) (*pb.ExchangeRatesResponse, error) {
+func (h *handler) GetExchangeRates(ctx context.Context, _ *pb.Empty) (*pb.ExchangeRatesResponse, error) {
 
-	rates, err := h.service.GetExchangeRates(ctx, e)
+	rates, err := h.service.GetExchangeRates(ctx, &pb.Empty{})
 	if err != nil {
 		err = status.Errorf(codes.Internal, "Internal error")
 	}
