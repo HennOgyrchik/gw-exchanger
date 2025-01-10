@@ -37,7 +37,7 @@ func (p PostgresConfig) ConnectionURL() (string, error) {
 	}
 	host = host + ":" + strconv.Itoa(p.Port)
 
-	rawURL := &url.URL{
+	urlBuilder := &url.URL{
 		Scheme: "postgres",
 		Host:   host,
 		Path:   p.DBName,
@@ -46,9 +46,9 @@ func (p PostgresConfig) ConnectionURL() (string, error) {
 	if p.User == "" || p.Password == "" {
 		return "", fmt.Errorf("PSQL_USER or PSQL_PASSWORD invalid")
 	}
-	rawURL.User = url.UserPassword(p.User, p.Password)
+	urlBuilder.User = url.UserPassword(p.User, p.Password)
 
-	query := rawURL.Query()
+	query := urlBuilder.Query()
 	connTimeout := p.ConnTimeout
 	if connTimeout < 1 {
 		return "", fmt.Errorf("PSQL_CONN_TIMEOUT invalid")
@@ -60,9 +60,9 @@ func (p PostgresConfig) ConnectionURL() (string, error) {
 	}
 	query.Add("sslmode", p.SSLMode)
 
-	rawURL.RawQuery = query.Encode()
+	urlBuilder.RawQuery = query.Encode()
 
-	return rawURL.String(), nil
+	return urlBuilder.String(), nil
 }
 
 func (g GRPCConfig) ConnectionURL() string {

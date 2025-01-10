@@ -11,10 +11,6 @@ import (
 	"time"
 )
 
-func Register(gRPCServer *grpc.Server, hndlr ExchangeServiceServer) {
-	pb.RegisterExchangeServiceServer(gRPCServer, &handler{service: hndlr})
-}
-
 func New(addr string, timeout time.Duration, hndlr ExchangeServiceServer) *Server {
 	opts := []grpc.ServerOption{grpc.ConnectionTimeout(timeout)}
 	grpcSrv := grpc.NewServer(opts...)

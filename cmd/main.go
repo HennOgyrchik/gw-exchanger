@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"gw-exchanger/internal/app"
 	"gw-exchanger/internal/config"
 	"gw-exchanger/internal/grpcServer"
@@ -19,7 +20,10 @@ func main() {
 
 	logger := logs.New(os.Stdout)
 
-	if err := config.LoadConfig("config.env"); err != nil {
+	confPath := flag.String("c", "config.env", "path to configuration")
+	flag.Parse()
+
+	if err := config.LoadConfig(*confPath); err != nil {
 		logger.Err("read configuration", err)
 		return
 	}
@@ -32,9 +36,9 @@ func main() {
 		return
 	}
 
-	db := postgres.New(dbUrl, time.Duration(cfg.Postgres.ConnTimeout)*time.Second)
+	db := postgres.New()
 
-	if err = db.Start(ctx); err != nil {
+	if err = db.Start(ctx, dbUrl, time.Duration(cfg.Postgres.ConnTimeout)*time.Second, "internal/storages/migrations"); err != nil {
 		logger.Err("connection db", err)
 		return
 	}
@@ -44,6 +48,7 @@ func main() {
 
 	go func() {
 		<-ctx.Done()
+		logger.Info("Closing", logs.Attr{Key: "code", Value: "0"})
 		srv.Stop()
 	}()
 

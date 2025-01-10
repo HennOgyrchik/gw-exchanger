@@ -1,0 +1,1 @@
+INSERT INTO rates (currency,rate) VALUES ('RUB', 1),('USD', 10),('EUR',20);

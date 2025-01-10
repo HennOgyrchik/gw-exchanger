@@ -1,0 +1,1 @@
+DELETE FROM rates WHERE currency IN ('RUB','USD','EUR');

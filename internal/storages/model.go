@@ -1,15 +1,15 @@
 package storages
 
 type CurrencyRequest struct {
-	fromCurrency string
-	toCurrency   string
+	FromCurrency string
+	ToCurrency   string
 }
 
 type ExchangeRateResponse struct {
-	fromCurrency string
-	toCurrency   string
-	rate         float64
+	FromCurrency string
+	ToCurrency   string
+	Rate         float32
 }
 type ExchangeRatesResponse struct {
-	rates map[string]float64
+	Rates map[string]float32
 }
